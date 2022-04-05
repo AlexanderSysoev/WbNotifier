@@ -1,0 +1,23 @@
+version: "3.4"
+services:
+  wbnotifier:
+    build: 
+      context: ../src/WbNotifier
+    container_name: wb_notifier
+    environment:
+      - Serilog:WriteTo:1:Args:serverUrl=http://seq:5341
+    depends_on:
+      - seq
+      
+  seq:
+    image: datalust/seq:latest
+    container_name: seq
+    restart: unless-stopped
+    expose:
+      - "5341"
+    ports:
+      - "80:80"
+    volumes:
+      - './.local-data/seq:/data'
+    environment:
+      - ACCEPT_EULA=Y
