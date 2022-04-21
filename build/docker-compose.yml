@@ -5,6 +5,7 @@ services:
       context: ../src/WbNotifier
     container_name: wb_notifier
     environment:
+      - ASPNETCORE_ENVIRONMENT=Development
       - Serilog:WriteTo:1:Args:serverUrl=http://seq:5341
     depends_on:
       - seq

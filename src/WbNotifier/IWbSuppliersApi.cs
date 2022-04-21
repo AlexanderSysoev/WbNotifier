@@ -87,11 +87,6 @@ public class Order
     public DeliveryAddressDetails DeliveryAddressDetails { get; set; }
 
     /// <summary>
-    /// Информация о клиенте
-    /// </summary>
-    public UserInfo UserInfo { get; set; }
-
-    /// <summary>
     /// Идентификатор артикула
     /// </summary>
     public int ChrtId { get; set; }
@@ -208,24 +203,6 @@ public class DeliveryAddressDetails
     /// Координата широты
     /// </summary>
     public double Latitude { get; set; }
-}
-
-public class UserInfo
-{
-    /// <summary>
-    /// ИД пользователя
-    /// </summary>
-    public int UserId { get; set; }
-
-    /// <summary>
-    /// ФИО
-    /// </summary>
-    public string Fio { get; set; }
-
-    /// <summary>
-    /// Номер телефона
-    /// </summary>
-    public string Phone { get; set; }
 }
 
 public enum OrderStatus
