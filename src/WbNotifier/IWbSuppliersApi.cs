@@ -232,10 +232,3 @@ public enum OrderDeliveryType
     _1 = 1,
     _2 = 2,
 }
-
-public class ErrorResponse
-{
-    public bool Error { get; set; }
-    
-    public string ErrorText { get; set; }
-}

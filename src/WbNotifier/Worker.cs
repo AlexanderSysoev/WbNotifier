@@ -39,9 +39,8 @@ public class Worker : BackgroundService
             }
             catch (ApiException e)
             {
-                var content = await e.GetContentAsAsync<ErrorResponse>();
-                _logger.LogError("Error occured while calling Wb Suppliers API: returned status code {statusCode} {reason} with message {message}",
-                    e.StatusCode, e.ReasonPhrase, content?.ErrorText);
+                _logger.LogError("Error occured while calling Wb Suppliers API: returned status code {statusCode} {reason} with content {content}",
+                    e.StatusCode, e.ReasonPhrase, e.Content);
             }
             catch (Exception e)
             {
