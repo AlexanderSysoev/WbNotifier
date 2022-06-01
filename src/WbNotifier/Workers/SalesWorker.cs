@@ -35,12 +35,12 @@ public class SalesWorker : BackgroundService
             }
             catch (ApiException e)
             {
-                _logger.LogError("Error occured while calling Wb sales API: returned status code {statusCode} {reason} with content {content}",
+                _logger.LogError("Error occured while calling Wb stats API: returned status code {statusCode} {reason} with content {content}",
                     e.StatusCode, e.ReasonPhrase, e.Content);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error occured while calling Wb sales API");
+                _logger.LogError(e, "Error occured while calling Wb stats API");
             }
 
             if (sales != null)
