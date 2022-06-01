@@ -1,27 +1,6 @@
-using Refit;
+namespace WbNotifier.WbApi;
 
-namespace WbNotifier;
-
-public interface IWbSuppliersApi
-{
-    /// <summary>
-    /// Возвращает список сборочных заданий поставщика.
-    /// </summary>
-    /// <param name="dateStart">С какой даты вернуть сборочные задания (заказы) (в формате RFC3339)</param>
-    /// <param name="dateEnd">По какую дату вернуть сборочные задания (заказы) (в формате RFC3339)</param>
-    /// <param name="status">Заказы какого статуса нужны</param>
-    /// <param name="take">Сколько записей вернуть за раз</param>
-    /// <param name="skip">Сколько записей пропустить</param>
-    /// <param name="id">Идентификатор сборочного задания, если нужно получить данные по какому-то определенному заказу.</param>
-    /// <returns>Список сборочных заданий</returns>
-    [Get("/api/v2/orders")]
-    public Task<OrdersResponse> GetOrdersAsync(
-        [Query(Format = "yyyy-MM-dd'T'HH:mm:ss.fffK")][AliasAs("date_start")]DateTimeOffset dateStart,
-        [Query(Format = "yyyy-MM-dd'T'HH:mm:ss.fffK")][AliasAs("date_end")] DateTimeOffset? dateEnd,
-        OrderStatus? status, int take, int skip, int? id);
-}
-
-public class OrdersResponse
+public class GetOrdersResponse
 {
     /// <summary>
     /// Общее количество заказов по заданным параметрам (за указанный промежуток времени)

@@ -1,25 +1,26 @@
 using Cronos;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using WbNotifier.Settings;
 using Timer = System.Timers.Timer;
 
-namespace WbNotifier;
+namespace WbNotifier.Workers;
 
-public class HealthService : IHostedService
+public class HealthWorker : IHostedService
 {
     private Timer? _timer;
     
     private readonly CronExpression _cronExpression;
     private readonly TimeZoneInfo _timeZoneInfo;
     private readonly ITelegramBotClient _telegramBotClient;
-    private readonly ILogger<HealthService> _logger;
+    private readonly ILogger<HealthWorker> _logger;
     private readonly ChatId _chatId;
 
-    public HealthService(
+    public HealthWorker(
         HealthCheckSettings healthCheckSettings,
         ITelegramBotClient telegramBotClient,
         TelegramBotSettings telegramBotSettings,
-        ILogger<HealthService> logger)
+        ILogger<HealthWorker> logger)
     {
         _cronExpression = CronExpression.Parse(healthCheckSettings.CronExpression);
         _timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(healthCheckSettings.TimeZoneId);
@@ -54,7 +55,7 @@ public class HealthService : IHostedService
                 {
                     try
                     {
-                        await _telegramBotClient.SendTextMessageAsync(_chatId, "WbNotifier is healthy", cancellationToken: cancellationToken);
+                        await _telegramBotClient.SendTextMessageAsync(_chatId, "Healthy", cancellationToken: cancellationToken);
                     }
                     catch (Exception e)
                     {

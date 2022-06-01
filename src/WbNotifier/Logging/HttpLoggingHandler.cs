@@ -1,6 +1,6 @@
 using System.Net.Http.Headers;
 
-namespace WbNotifier;
+namespace WbNotifier.Logging;
 
 public class HttpLoggingHandler : DelegatingHandler
 {

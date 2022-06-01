@@ -1,4 +1,4 @@
-namespace WbNotifier;
+namespace WbNotifier.Settings;
 
 public class HealthCheckSettings
 {

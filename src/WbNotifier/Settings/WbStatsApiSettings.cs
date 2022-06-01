@@ -1,6 +1,6 @@
-namespace WbNotifier;
+namespace WbNotifier.Settings;
 
-public class WbApiSettings
+public class WbStatsApiSettings
 {
     public string Host { get; set; }
     

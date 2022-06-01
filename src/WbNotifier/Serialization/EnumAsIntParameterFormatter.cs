@@ -1,7 +1,7 @@
 using System.Reflection;
 using Refit;
 
-namespace WbNotifier;
+namespace WbNotifier.Serialization;
 
 public class EnumAsIntParameterFormatter: DefaultUrlParameterFormatter
 {
