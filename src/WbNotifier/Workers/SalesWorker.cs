@@ -8,7 +8,7 @@ public class SalesWorker : BackgroundService
     private readonly IWbStatsApi _wbStatsApi;
     private readonly Notifier _notifier;
     private readonly ILogger<SalesWorker> _logger;
-    private List<Sale> _previousSales;
+    private List<Sale>? _previousSales;
 
     public SalesWorker(
         IWbStatsApi wbStatsApi,
@@ -52,9 +52,15 @@ public class SalesWorker : BackgroundService
                 }
                 else
                 {
-                    var newSales = sales.Except(_previousSales).ToList();
+                    var newSales = sales.Except(_previousSales!).ToList();
                     foreach (var newSale in newSales)
                     {
+                        if (string.IsNullOrEmpty(newSale.Barcode))
+                        {
+                            _logger.LogError("Empty barcode in sale ID {id}", newSale.SaleId);
+                            continue;
+                        }
+                        
                         await _notifier.Notify(newSale.Barcode, $"💰 New SALE in total {newSale.ForPay} RUB!");
                     }
                 }

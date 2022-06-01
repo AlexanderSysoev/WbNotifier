@@ -53,10 +53,16 @@ public class OrdersWorker : BackgroundService
                 _logger.LogError(e, "Error occured while calling Wb suppliers API");
             }
             
-            if (ordersResponse is {Total: > 0})
+            if (ordersResponse is {Total: > 0, Orders: { }})
             {
                 foreach (var order in ordersResponse.Orders)
                 {
+                    if (string.IsNullOrEmpty(order.Barcode))
+                    {
+                        _logger.LogError("Empty barcode in order ID {id}", order.OrderId);
+                        continue;
+                    }
+                    
                     await _notifier.Notify(order.Barcode, $"🔔 New ORDER in total {order.TotalPrice / 100} RUB!");
                 }
             }

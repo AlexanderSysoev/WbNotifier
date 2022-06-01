@@ -70,7 +70,7 @@ var host = hostBuilder
         {
             Serilog.Debugging.SelfLog.Enable(Console.Error);
             
-            var telegramBotSettings = services.GetService<TelegramBotSettings>();
+            var telegramBotSettings = services.GetRequiredService<TelegramBotSettings>();
             configuration.ReadFrom.Configuration(context.Configuration)
                 .WriteTo.Telegram(
                     restrictedToMinimumLevel: LogEventLevel.Error,

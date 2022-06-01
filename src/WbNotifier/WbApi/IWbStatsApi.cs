@@ -18,9 +18,10 @@ public interface IWbStatsApi
 
 public class Sale : IEquatable<Sale>
 {
-    public Sale(DateTime date, string supplierArticle, decimal finishedPrice, decimal forPay, string subject,
-        string brand, string warehouseName, string barcode)
+    public Sale(string? saleId, DateTime date, string? supplierArticle, decimal finishedPrice, decimal forPay, string? subject,
+        string? brand, string? warehouseName, string? barcode)
     {
+        SaleId = saleId;
         Date = date;
         SupplierArticle = supplierArticle;
         FinishedPrice = finishedPrice;
@@ -30,11 +31,16 @@ public class Sale : IEquatable<Sale>
         WarehouseName = warehouseName;
         Barcode = barcode;
     }
+    
+    /// <summary>
+    /// Уникальный идентификатор продажи/возврата
+    /// </summary>
+    public string? SaleId { get; }
 
     /// <summary>
     /// Баркод
     /// </summary>
-    public string Barcode { get; }
+    public string? Barcode { get; }
     
     /// <summary>
     /// Дата продажи
@@ -44,7 +50,7 @@ public class Sale : IEquatable<Sale>
     /// <summary>
     /// Артикул поставщика
     /// </summary>
-    public string SupplierArticle { get; }
+    public string? SupplierArticle { get; }
 
     /// <summary>
     /// Фактическая цена из заказа (с учетом всех скидок, включая и от ВБ)
@@ -59,17 +65,17 @@ public class Sale : IEquatable<Sale>
     /// <summary>
     /// Предмет
     /// </summary>
-    public string Subject { get; }
+    public string? Subject { get; }
 
     /// <summary>
     /// Брэнд
     /// </summary>
-    public string Brand { get; }
+    public string? Brand { get; }
 
     /// <summary>
     /// Склад
     /// </summary>
-    public string WarehouseName { get; }
+    public string? WarehouseName { get; }
 
     public bool Equals(Sale? other)
     {

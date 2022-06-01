@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
+        <WarningsAsErrors>Nullable</WarningsAsErrors>
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>dotnet-WbNotifier-46AFEE63-8481-4B58-BDD8-11B2715AAE93</UserSecretsId>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>

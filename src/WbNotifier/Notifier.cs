@@ -66,7 +66,7 @@ public class Notifier
              return;
         }
 
-        if (!getCardsResponse.Result.Cards.Any())
+        if (!(getCardsResponse.Result?.Cards?.Any() ?? false))
         {
             _logger.LogError("No cards found for barcode {barcode}", barcode);
             return;
@@ -84,19 +84,25 @@ public class Notifier
         string? colour = null;
         string? size = null;
 
-        foreach (var nomenclature in card.Nomenclatures)
+        foreach (var nomenclature in card.Nomenclatures ?? Enumerable.Empty<Nomenclature>())
         {
-            foreach (var var in nomenclature.Variations.Where(var => var.Barcodes.Contains(barcode)))
+            foreach (var var in nomenclature.Variations?.Where(var =>
+                         var.Barcodes != null && var.Barcodes.Contains(barcode)) ?? Enumerable.Empty<Variation>())
             {
-                photoUrl = nomenclature.Addin
-                    .FirstOrDefault(ai => ai.Type.Equals("фото", StringComparison.OrdinalIgnoreCase))?.Params
+                photoUrl = nomenclature.Addin?
+                    .FirstOrDefault(ai => ai.Type != null && ai.Type.Equals("фото", StringComparison.OrdinalIgnoreCase))
+                    ?.Params?
                     .FirstOrDefault()?.Value;
-                colour = nomenclature.Addin
-                    .FirstOrDefault(ai => ai.Type.Equals("основной цвет", StringComparison.OrdinalIgnoreCase))?.Params
+                
+                colour = nomenclature.Addin?
+                    .FirstOrDefault(ai =>
+                        ai.Type != null && ai.Type.Equals("основной цвет", StringComparison.OrdinalIgnoreCase))?.Params?
                     .FirstOrDefault()?.Value;
-                size = var.Addin
-                    .FirstOrDefault(ai => ai.Type.Equals("рос. размер", StringComparison.OrdinalIgnoreCase))
-                    ?.Params.FirstOrDefault()?.Value;
+                
+                size = var.Addin?
+                    .FirstOrDefault(ai =>
+                        ai.Type != null && ai.Type.Equals("рос. размер", StringComparison.OrdinalIgnoreCase))
+                    ?.Params?.FirstOrDefault()?.Value;
                 break;
             }
         }

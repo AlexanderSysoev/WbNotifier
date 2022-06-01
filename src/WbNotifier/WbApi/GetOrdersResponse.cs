@@ -10,7 +10,7 @@ public class GetOrdersResponse
     /// <summary>
     /// Список заказов
     /// </summary>
-    public List<Order> Orders { get; set; }
+    public List<Order>? Orders { get; set; }
 }
 
 public class Order
@@ -18,12 +18,12 @@ public class Order
     /// <summary>
     /// Идентификатор заказа
     /// </summary>
-    public string OrderId { get; set; }
+    public string? OrderId { get; set; }
 
     /// <summary>
     /// Дата создания заказа (RFC3339)
     /// </summary>
-    public DateTimeOffset DateCreated { get; set; }
+    public DateTime DateCreated { get; set; }
 
     /// <summary>
     /// Идентификатор склада WB, на которой заказ должен быть доставлен
@@ -43,7 +43,7 @@ public class Order
     /// <summary>
     /// Адрес ПВЗ/магазина, куда необходимо доставить заказ (если применимо)
     /// </summary>
-    public string OfficeAddress { get; set; }
+    public string? OfficeAddress { get; set; }
 
     /// <summary>
     /// Широта адреса ПВЗ/магазина, куда необходимо доставить заказ (если применимо)
@@ -58,12 +58,12 @@ public class Order
     /// <summary>
     /// Адрес клиента для доставки
     /// </summary>
-    public string DeliveryAddress { get; set; }
+    public string? DeliveryAddress { get; set; }
 
     /// <summary>
     /// Детализованный адрес клиента для доставки (если применимо). Некоторые из полей могут прийти пустыми из-за специфики адреса.
     /// </summary>
-    public DeliveryAddressDetails DeliveryAddressDetails { get; set; }
+    public DeliveryAddressDetails? DeliveryAddressDetails { get; set; }
 
     /// <summary>
     /// Идентификатор артикула
@@ -73,17 +73,17 @@ public class Order
     /// <summary>
     /// Штрихкод товара
     /// </summary>
-    public string Barcode { get; set; }
+    public string? Barcode { get; set; }
 
     /// <summary>
     /// Массив штрихкодов товара
     /// </summary>
-    public List<string> Barcodes { get; set; }
+    public List<string>? Barcodes { get; set; }
 
     /// <summary>
     /// Массив СЦ приоритетных для доставки заказа. Если поле не заполнено или массив пустой, приоритетного СЦ нет для данного заказа нет.
     /// </summary>
-    public List<string> ScOfficesNames { get; set; }
+    public List<string>? ScOfficesNames { get; set; }
 
     /// <summary>
     ///  0	- Новый заказ
@@ -115,7 +115,7 @@ public class Order
     /// <summary>
     /// Уникальный идентификатор вещи, разный у одинаковых chrt_id
     /// </summary>
-    public string Rid { get; set; }
+    public string? Rid { get; set; }
 
     /// <summary>
     /// Стоимость товара с учетом скидок в копейках!
@@ -125,7 +125,7 @@ public class Order
     /// <summary>
     /// Идентификатор транзакции для группировки заказов. Заказы в одной корзине клиента будут иметь одинаковый orderUID.
     /// </summary>
-    public string OrderUID { get; set; }
+    public string? OrderUID { get; set; }
 
     /// <summary>
     /// Тип доставки:
@@ -141,37 +141,37 @@ public class DeliveryAddressDetails
     /// <summary>
     /// Область
     /// </summary>
-    public string Province { get; set; }
+    public string? Province { get; set; }
 
     /// <summary>
     /// Район
     /// </summary>
-    public string Area { get; set; }
+    public string? Area { get; set; }
 
     /// <summary>
     /// Город
     /// </summary>
-    public string City { get; set; }
+    public string? City { get; set; }
 
     /// <summary>
     /// Улица
     /// </summary>
-    public string Street { get; set; }
+    public string? Street { get; set; }
 
     /// <summary>
     /// Номер дома
     /// </summary>
-    public string Home { get; set; }
+    public string? Home { get; set; }
 
     /// <summary>
     /// Номер квартиры
     /// </summary>
-    public string Flat { get; set; }
+    public string? Flat { get; set; }
 
     /// <summary>
     /// Подъезд
     /// </summary>
-    public string Entrance { get; set; }
+    public string? Entrance { get; set; }
 
     /// <summary>
     /// Координата долготы
