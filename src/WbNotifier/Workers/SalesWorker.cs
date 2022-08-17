@@ -47,7 +47,6 @@ public class SalesWorker : BackgroundService
             {
                 if (isFirstRun)
                 {
-                    _previousSales = sales;
                     isFirstRun = false;
                 }
                 else
@@ -64,9 +63,11 @@ public class SalesWorker : BackgroundService
                         await _notifier.Notify(newSale.Barcode, $"💰 New SALE in total {newSale.ForPay} RUB!");
                     }
                 }
+                
+                _previousSales = sales;
             }
 
-            await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
+            await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
         }
     }
 }
