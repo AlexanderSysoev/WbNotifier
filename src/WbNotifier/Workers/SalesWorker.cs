@@ -67,7 +67,7 @@ public class SalesWorker : BackgroundService
                 _previousSales = sales;
             }
 
-            await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
+            await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
         }
     }
 }
