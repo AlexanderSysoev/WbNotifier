@@ -19,12 +19,12 @@ public interface IWbSuppliersApi
         [Query(Format = "yyyy-MM-dd'T'HH:mm:ss.fffK")][AliasAs("date_start")]DateTimeOffset dateStart,
         [Query(Format = "yyyy-MM-dd'T'HH:mm:ss.fffK")][AliasAs("date_end")] DateTimeOffset? dateEnd,
         OrderStatus? status, int take, int skip, int? id);
-
+    
     /// <summary>
-    /// Получить список карточек поставщика с фильтром и сортировкой
+    /// Получить список карточек поставщика
     /// </summary>
     /// <param name="request">Запрос на получение</param>
-    /// <returns>Список карточек</returns>
-    [Post("/card/list")]
+    /// <returns>Ответ со списком карточек</returns>
+    [Post("/content/v1/cards/cursor/list")]
     public Task<GetCardsResponse> GetCardsAsync(GetCardsRequest request);
 }

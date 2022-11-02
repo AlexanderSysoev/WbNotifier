@@ -33,20 +33,16 @@ public class Notifier
         {
             getCardsResponse = await _wbSuppliersApi.GetCardsAsync(new GetCardsRequest
             {
-                Id = Guid.NewGuid().ToString(),
-                Jsonrpc = "2.0",
-                Params = new GetCardRequestParams
+                Sort = new CardsSort
                 {
-                    Filter = new Sort
+                    Cursor = new CardsCursor
                     {
-                        Find = new List<Find>
-                        {
-                            new()
-                            {
-                                Column = "nomenclatures.variations.barcode",
-                                Search = barcode
-                            }
-                        }
+                        Limit = 100
+                    },
+                    Filter = new CardsFilter
+                    {
+                        TextSearch = barcode,
+                        WithPhoto = -1
                     }
                 }
             });
@@ -66,63 +62,40 @@ public class Notifier
              return;
         }
 
-        if (!(getCardsResponse.Result?.Cards?.Any() ?? false))
+        if (!getCardsResponse.Data.Cards.Any())
         {
             _logger.LogError("No cards found for barcode {barcode}", barcode);
             return;
         }
         
-        if (getCardsResponse.Result.Cards.Count > 1)
+        if (getCardsResponse.Data.Cards.Count > 1)
         {
             _logger.LogError("More than one card found for barcode {barcode}", barcode);
             return;
         }
 
-        var card = getCardsResponse.Result.Cards.Single();
-        
-        string? photoUrl = null;
-        string? colour = null;
-        string? size = null;
+        var card = getCardsResponse.Data.Cards.Single();
 
-        foreach (var nomenclature in card.Nomenclatures ?? Enumerable.Empty<Nomenclature>())
-        {
-            foreach (var var in nomenclature.Variations?.Where(var =>
-                         var.Barcodes != null && var.Barcodes.Contains(barcode)) ?? Enumerable.Empty<Variation>())
-            {
-                photoUrl = nomenclature.Addin?
-                    .FirstOrDefault(ai => ai.Type != null && ai.Type.Equals("фото", StringComparison.OrdinalIgnoreCase))
-                    ?.Params?
-                    .FirstOrDefault()?.Value;
-                
-                colour = nomenclature.Addin?
-                    .FirstOrDefault(ai =>
-                        ai.Type != null && ai.Type.Equals("основной цвет", StringComparison.OrdinalIgnoreCase))?.Params?
-                    .FirstOrDefault()?.Value;
-                
-                size = var.Addin?
-                    .FirstOrDefault(ai =>
-                        ai.Type != null && ai.Type.Equals("рос. размер", StringComparison.OrdinalIgnoreCase))
-                    ?.Params?.FirstOrDefault()?.Value;
-                break;
-            }
-        }
-
+        var photoUrl = card.MediaFiles.FirstOrDefault();
         if (string.IsNullOrEmpty(photoUrl))
         {
             _logger.LogError("PhotoUrl is empty for barcode {barcode}", barcode);
             return;
         }
 
-        if (!string.IsNullOrEmpty(card.SupplierVendorCode))
+        var vendorCode = card.VendorCode;
+        if (!string.IsNullOrEmpty(vendorCode))
         {
-            caption += $" {card.SupplierVendorCode}";
+            caption += $" {vendorCode}";
         }
         
+        var colour = card.Colors.FirstOrDefault();
         if (!string.IsNullOrEmpty(colour))
         {
             caption += $", {colour}";
         }
         
+        var size = card.Sizes.FirstOrDefault(s => s.Skus.Contains(barcode))?.TechSize;
         if (!string.IsNullOrEmpty(size))
         {
             caption += $", {size}";

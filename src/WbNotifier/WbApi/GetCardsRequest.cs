@@ -2,61 +2,24 @@ namespace WbNotifier.WbApi;
 
 public class GetCardsRequest
 {
-    public string? Id { get; set; }
-
-    public string? Jsonrpc { get; set; }
-
-    public GetCardRequestParams? Params { get; set; }
+    public CardsSort Sort { get; set; } = new();
 }
 
-public class GetCardRequestParams
+public class CardsSort
 {
-    // Фильтр
-    public Sort? Filter { get; set; }
+    public CardsCursor Cursor { get; set; } = new();
 
-    // Пагинация
-    public Cursor? Query { get; set; }
-
-    // Параметр указывающий, что вернуться только карточки в которых есть ошибки, которые не удалось создать.
-    // Параметр не обязательный, если его не указывать вернуться только созадныне карточки
-    public bool WithError { get; set; }
+    public CardsFilter Filter { get; set; } = new();
 }
 
-public class Sort
+public class CardsCursor
 {
-    public List<Filter>? Filter { get; set; }
-
-    public List<Find>? Find { get; set; }
-
-    public CardOrder? Order { get; set; }
+    public int Limit { get; set; } = 10;
 }
 
-public class Filter
+public class CardsFilter
 {
-    public string? Column { get; set; }
-    
-    public string? ExcludedValues { get; set; }
-}
+    public string TextSearch { get; set; } = string.Empty;
 
-public class Find
-{
-    public string? Column { get; set; }
-    
-    public string? Search { get; set; }
-}
-
-public class CardOrder
-{
-    public string? Column { get; set; }
-
-    public string? Order { get; set; }
-}
-
-public class Cursor
-{
-    public int Limit { get; set; }
-
-    public int Offset { get; set; }
-
-    public int Total { get; set; }
+    public int WithPhoto { get; set; } = -1;
 }
