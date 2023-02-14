@@ -18,8 +18,8 @@ var hostBuilder = Host.CreateDefaultBuilder(args);
 var host = hostBuilder
     .ConfigureServices((hostBuilderContext, services) =>
     {
-        var wbOrdersApiSettings = BindSettings<WbSuppliersApiSettings>("WbSuppliersApi");
-        var wbSalesApiSettings = BindSettings<WbStatsApiSettings>("WbStatsApi");
+        var wbSuppliersApiSettings = BindSettings<WbSuppliersApiSettings>("WbSuppliersApi");
+        var wbStatsApiSettings = BindSettings<WbStatsApiSettings>("WbStatsApi");
         var telegramBotSettings = BindSettings<TelegramBotSettings>("TelegramBot");
         BindSettings<HealthCheckSettings>("HealthCheck");
 
@@ -29,24 +29,24 @@ var host = hostBuilder
         services.AddSingleton<Notifier>();
 
         services.AddTransient<HttpLoggingHandler>();
-        services.AddTransient<ApiKeyInjectorDelegatingHandler>();
+
         services.AddRefitClient<IWbSuppliersApi>(new RefitSettings
             {
                 UrlParameterFormatter = new EnumAsIntParameterFormatter()
             })
             .ConfigureHttpClient(c =>
             {
-                c.BaseAddress = new Uri(wbOrdersApiSettings.Host);
-                c.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", wbOrdersApiSettings.Token);
+                c.BaseAddress = new Uri(wbSuppliersApiSettings.Host);
+                c.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", wbSuppliersApiSettings.Token);
             })
             .AddHttpMessageHandler<HttpLoggingHandler>();
         
         services.AddRefitClient<IWbStatsApi>()
             .ConfigureHttpClient(c =>
             {
-                c.BaseAddress = new Uri(wbSalesApiSettings.Host);
+                c.BaseAddress = new Uri(wbStatsApiSettings.Host);
+                c.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", wbStatsApiSettings.Token);
             })
-            .AddHttpMessageHandler<ApiKeyInjectorDelegatingHandler>()
             .AddHttpMessageHandler<HttpLoggingHandler>();
         
         services.AddHttpClient("telegram")
