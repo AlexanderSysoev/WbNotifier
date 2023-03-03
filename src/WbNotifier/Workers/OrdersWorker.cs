@@ -23,25 +23,10 @@ public class OrdersWorker : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            GetOrdersResponse? ordersResponse = null;
+            GetNewOrdersResponse? ordersResponse = null;
             try
             {
-                //Uncomment for test purposes
-                /*ordersResponse = await _wbSuppliersApi.GetOrdersAsync(
-                    dateStart: new DateTime(2022, 5, 30),
-                    dateEnd: null,
-                    status: OrderStatus._2,
-                    take: 10,
-                    skip: 0,
-                    id: null);*/
-                
-                ordersResponse = await _wbSuppliersApi.GetOrdersAsync(
-                    dateStart: DateTimeOffset.Now.AddHours(-24),
-                    dateEnd: null,
-                    status: OrderStatus._0,
-                    take: 10,
-                    skip: 0,
-                    id: null);
+                ordersResponse = await _wbSuppliersApi.GetNewOrdersAsync();
             }
             catch (ApiException e)
             {
@@ -53,17 +38,24 @@ public class OrdersWorker : BackgroundService
                 _logger.LogError(e, "Error occured while calling Wb suppliers API");
             }
             
-            if (ordersResponse is {Total: > 0, Orders: { }})
+            if (ordersResponse?.Orders != null && ordersResponse.Orders.Any())
             {
                 foreach (var order in ordersResponse.Orders)
                 {
-                    if (string.IsNullOrEmpty(order.Barcode))
+                    if (order.Skus == null || !order.Skus.Any())
                     {
-                        _logger.LogError("Empty barcode in order ID {id}", order.OrderId);
+                        _logger.LogError("No barcodes found in order ID {id}", order.Id);
                         continue;
                     }
-                    
-                    await _notifier.Notify(order.Barcode, $"🔔 New ORDER in total {order.TotalPrice / 100} RUB!");
+
+                    var barcode = order.Skus.FirstOrDefault();
+                    if (string.IsNullOrEmpty(barcode))
+                    {
+                        _logger.LogError("Empty barcode in order ID {id}", order.Id);
+                        continue;
+                    }
+
+                    await _notifier.Notify(barcode, $"🔔 New ORDER in total {order.ConvertedPrice / 100} RUB!");
                 }
             }
             
